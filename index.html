@@ -6,6 +6,9 @@
     <title>Level Up Home Services | Tucson, AZ</title>
     <meta name="description" content="Precision drywall, custom renovations, and reliable remodeling in Tucson, Marana & Vail. Level Up Home Services LLC.">
     
+    <!-- FAVICON LINK (Save your square icon as favicon.png in the same folder) -->
+    <link rel="icon" type="image/png" href="favicon.png">
+
     <!-- Tailwind CSS (No build step needed) -->
     <script src="https://cdn.tailwindcss.com"></script>
     
@@ -15,7 +18,7 @@
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
     
-    <!-- Markdown Parser (Kept just in case, though we primarily use JSON now) -->
+    <!-- Markdown Parser -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
     <style>
@@ -63,8 +66,9 @@
     <nav class="fixed top-0 w-full z-50 bg-slate-900/95 backdrop-blur border-b-4 border-slate-800 shadow-lg">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-20">
-                <!-- Logo -->
-                <div class="flex items-center space-x-2 group cursor-pointer hover:scale-105 transition-transform duration-200">
+                <!-- Logo (Linked to Top) -->
+                <a href="#" class="flex items-center space-x-2 group cursor-pointer hover:scale-105 transition-transform duration-200">
+                    <!-- Configured to look like the "Arrow Up" from your brand -->
                     <div class="bg-orange-600 p-2 rounded-lg border-2 border-orange-400 shadow-[0_0_15px_rgba(234,88,12,0.5)]">
                         <i data-lucide="arrow-up" class="w-6 h-6 text-white" stroke-width="3"></i>
                     </div>
@@ -74,7 +78,7 @@
                         </span>
                         <span class="text-xs font-bold text-slate-400 tracking-widest">HOME SERVICES</span>
                     </div>
-                </div>
+                </a>
 
                 <!-- Desktop Nav -->
                 <div class="hidden md:flex items-center space-x-8">
@@ -120,6 +124,11 @@
         
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div class="text-center">
+                
+                <!-- HERO LOGO ADDED HERE -->
+                <!-- Ensure you have a file named 'logo.png' in your repository folder -->
+                <img src="logo.png" alt="Level Up Home Services Logo" class="w-64 md:w-96 mx-auto mb-10 drop-shadow-[0_20px_50px_rgba(0,0,0,0.5)] hover:scale-105 transition-transform duration-300">
+
                 <div class="inline-block mb-4 px-4 py-1 bg-slate-800 rounded-full border border-slate-600">
                     <span class="font-mono tracking-tighter text-orange-400 text-sm font-bold flex items-center gap-2">
                         <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
@@ -432,11 +441,9 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid md:grid-cols-4 gap-8 mb-12">
                 <div class="col-span-2">
+                    <!-- Footer Logo (Using Image as well) -->
                     <div class="flex items-center space-x-2 mb-4">
-                        <div class="bg-orange-600 p-1 rounded">
-                            <i data-lucide="arrow-up" class="w-4 h-4 text-white"></i>
-                        </div>
-                        <span class="text-xl font-black italic text-white">LEVEL UP</span>
+                         <img src="logo.png" alt="Level Up Home Services" class="h-12 w-auto object-contain">
                     </div>
                     <p class="text-slate-500 max-w-sm">
                         Serving Tucson, Marana & Vail. <br/>
