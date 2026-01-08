@@ -20,10 +20,12 @@
     <link rel="icon" type="image/png" href="favicon.png">
 
     <!-- EXTERNAL LIBRARIES -->
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
     <style>
         body { font-family: 'Inter', sans-serif; }
@@ -65,7 +67,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-20">
                 <!-- Logo -->
-                <a href="#" class="flex items-center space-x-2 group cursor-pointer hover:scale-105 transition-transform duration-200">
+                <a href="#" aria-label="Back to top" class="flex items-center space-x-2 group cursor-pointer hover:scale-105 transition-transform duration-200">
                     <div class="bg-orange-600 p-2 rounded-lg border-2 border-orange-400 shadow-[0_0_15px_rgba(234,88,12,0.5)]">
                         <i data-lucide="arrow-up" class="w-6 h-6 text-white" stroke-width="3"></i>
                     </div>
@@ -93,7 +95,7 @@
 
                 <!-- Mobile Menu Button -->
                 <div class="md:hidden">
-                    <button id="mobile-menu-btn" class="text-slate-300 hover:text-white p-2">
+                    <button id="mobile-menu-btn" aria-label="Toggle mobile menu" class="text-slate-300 hover:text-white p-2">
                         <i data-lucide="menu" class="w-8 h-8"></i>
                     </button>
                 </div>
@@ -126,7 +128,7 @@
                 <!-- Main Brand Logo -->
                 <img src="logo.png" alt="Level Up Home Services Logo" class="w-32 md:w-48 mx-auto mb-6 drop-shadow-[0_20px_50px_rgba(0,0,0,0.5)] hover:scale-105 transition-transform duration-300">
 
-                <!-- Loading Bar Aesthetic (SWAPPED to Top) -->
+                <!-- Loading Bar Aesthetic -->
                 <div class="mb-10 max-w-md mx-auto">
                     <div class="flex justify-between text-xs font-mono text-slate-400 mb-1">
                         <span>SYSTEM STATUS</span>
@@ -135,7 +137,7 @@
                     <div class="h-4 bg-slate-800 rounded-full border border-slate-600 overflow-hidden">
                         <div id="loading-bar" class="h-full bg-gradient-to-r from-orange-600 to-yellow-500 transition-all duration-300 ease-out" style="width: 0%"></div>
                     </div>
-                    <p class="text-center text-xs text-slate-500 mt-2 font-mono">READY FOR NEW PLAYERS</p>
+                    <p class="text-center text-xs text-slate-400 mt-2 font-mono">READY FOR NEW PLAYERS</p>
                 </div>
                 
                 <h1 class="text-5xl md:text-7xl font-black text-white mb-6 tracking-tight drop-shadow-2xl">
@@ -160,7 +162,7 @@
                     </a>
                 </div>
 
-                <!-- Service Areas (SWAPPED to Bottom & Updated) -->
+                <!-- Service Areas -->
                 <div class="mt-16 inline-block px-6 py-2 bg-slate-800 rounded-full border border-slate-600">
                     <span class="font-mono tracking-tighter text-orange-400 text-sm font-bold flex items-center gap-2">
                         <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
@@ -270,7 +272,7 @@
                                 > Input Room Data:
                             </label>
                             <textarea id="roomInput" rows="3" 
-                                class="w-full bg-slate-900 text-white font-mono p-4 rounded-lg border-2 border-slate-700 focus:border-orange-500 focus:ring-0 focus:outline-none placeholder-slate-600 resize-none transition-colors"
+                                class="w-full bg-slate-900 text-white font-mono p-4 rounded-lg border-2 border-slate-700 focus:border-orange-500 focus:ring-0 focus:outline-none placeholder-slate-400 resize-none transition-colors"
                                 placeholder="Example: My master bathroom is outdated with pink tiles and bad lighting..."></textarea>
                         </div>
 
@@ -439,7 +441,7 @@
                             </div>
                             <span class="text-xl font-black italic text-white">LEVEL UP</span>
                         </div>
-                        <p class="text-slate-500 max-w-sm">
+                        <p class="text-slate-400 max-w-sm">
                             Serving Tucson, Marana & Vail. <br/>
                             Elevating homes one level at a time.
                         </p>
@@ -472,7 +474,7 @@
                 </div>
             </div>
             
-            <div class="border-t border-slate-900 pt-8 flex flex-col md:flex-row justify-between items-center text-xs text-slate-600 font-mono">
+            <div class="border-t border-slate-900 pt-8 flex flex-col md:flex-row justify-between items-center text-xs text-slate-400 font-mono">
                 <p>© 2026 Level Up Home Services LLC. All Rights Reserved.</p>
                 <p class="mt-2 md:mt-0">GAME OVER / CONTINUE?</p>
             </div>
@@ -480,26 +482,32 @@
     </footer>
 
     <script>
-        // Init Icons
-        lucide.createIcons();
+        document.addEventListener('DOMContentLoaded', () => {
+            // Init Icons once DOM is ready
+            if (window.lucide) {
+                lucide.createIcons();
+            }
 
-        // Loading Bar Sim
-        const loadingBar = document.getElementById('loading-bar');
-        const loadingText = document.getElementById('loading-text');
-        let progress = 0;
-        const interval = setInterval(() => {
-            progress += 1;
-            if (progress >= 100) { progress = 100; clearInterval(interval); }
-            loadingBar.style.width = progress + '%';
-            loadingText.innerText = progress + '% LOADED';
-        }, 50);
+            // Loading Bar Sim
+            const loadingBar = document.getElementById('loading-bar');
+            const loadingText = document.getElementById('loading-text');
+            let progress = 0;
+            const interval = setInterval(() => {
+                progress += 1;
+                if (progress >= 100) { progress = 100; clearInterval(interval); }
+                loadingBar.style.width = progress + '%';
+                loadingText.innerText = progress + '% LOADED';
+            }, 50);
 
-        // Mobile Menu
-        const menuBtn = document.getElementById('mobile-menu-btn');
-        const mobileMenu = document.getElementById('mobile-menu');
-        menuBtn.addEventListener('click', () => { mobileMenu.classList.toggle('hidden'); });
-        document.querySelectorAll('.mobile-link').forEach(link => {
-            link.addEventListener('click', () => { mobileMenu.classList.add('hidden'); });
+            // Mobile Menu
+            const menuBtn = document.getElementById('mobile-menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+            if (menuBtn && mobileMenu) {
+                menuBtn.addEventListener('click', () => { mobileMenu.classList.toggle('hidden'); });
+                document.querySelectorAll('.mobile-link').forEach(link => {
+                    link.addEventListener('click', () => { mobileMenu.classList.add('hidden'); });
+                });
+            }
         });
 
         // --- AI LOGIC ---
@@ -524,38 +532,48 @@
             try {
                 const response = await callGeminiWithBackoff(systemPrompt, userQuery);
                 const cleanJson = response.replace(/```json/g, '').replace(/```/g, '').trim();
-                const quests = JSON.parse(cleanJson);
+                let quests = [];
+                try {
+                    quests = JSON.parse(cleanJson);
+                } catch (e) {
+                    console.error("JSON Parsing Error:", e);
+                    throw new Error("Failed to parse mission data.");
+                }
 
                 let htmlContent = '';
-                quests.forEach((quest) => {
-                    let difficultyColor = 'border-yellow-500 text-yellow-500';
-                    if(quest.difficulty === 'Easy') difficultyColor = 'border-green-500 text-green-500';
-                    if(quest.difficulty === 'Hard') difficultyColor = 'border-red-600 text-red-600';
+                if (Array.isArray(quests)) {
+                    quests.forEach((quest) => {
+                        let difficultyColor = 'border-yellow-500 text-yellow-500';
+                        if(quest.difficulty === 'Easy') difficultyColor = 'border-green-500 text-green-500';
+                        if(quest.difficulty === 'Hard') difficultyColor = 'border-red-600 text-red-600';
 
-                    htmlContent += `
-                        <div class="quest-card bg-slate-900 rounded-lg border-l-4 ${difficultyColor} p-6 border-y border-r border-slate-700">
-                            <div class="flex justify-between items-start mb-3">
-                                <h4 class="text-xl font-black italic text-white uppercase">${quest.title}</h4>
-                                <span class="text-xs font-mono font-bold uppercase px-2 py-1 rounded bg-slate-800 ${difficultyColor} border border-current">
-                                    ${quest.difficulty}
-                                </span>
+                        htmlContent += `
+                            <div class="quest-card bg-slate-900 rounded-lg border-l-4 ${difficultyColor} p-6 border-y border-r border-slate-700">
+                                <div class="flex justify-between items-start mb-3">
+                                    <h4 class="text-xl font-black italic text-white uppercase">${quest.title}</h4>
+                                    <span class="text-xs font-mono font-bold uppercase px-2 py-1 rounded bg-slate-800 ${difficultyColor} border border-current">
+                                        ${quest.difficulty}
+                                    </span>
+                                </div>
+                                <p class="text-slate-300 mb-4 leading-relaxed">${quest.description}</p>
+                                <div class="flex items-center gap-2 text-orange-400 font-mono text-sm bg-orange-900/20 p-2 rounded border border-orange-500/20">
+                                    <i data-lucide="gem" class="w-4 h-4"></i>
+                                    <span><strong>LOOT:</strong> ${quest.loot}</span>
+                                </div>
                             </div>
-                            <p class="text-slate-300 mb-4 leading-relaxed">${quest.description}</p>
-                            <div class="flex items-center gap-2 text-orange-400 font-mono text-sm bg-orange-900/20 p-2 rounded border border-orange-500/20">
-                                <i data-lucide="gem" class="w-4 h-4"></i>
-                                <span><strong>LOOT:</strong> ${quest.loot}</span>
-                            </div>
-                        </div>
-                    `;
-                });
+                        `;
+                    });
+                } else {
+                    htmlContent = "<p class='text-red-400'>Mission Data Corrupted. Try again.</p>";
+                }
 
                 outputText.innerHTML = htmlContent;
                 outputDiv.classList.remove('hidden');
-                lucide.createIcons();
+                if (window.lucide) lucide.createIcons();
                 outputDiv.scrollIntoView({ behavior: 'smooth' });
 
             } catch (error) {
-                console.error("Error:", error);
+                console.error("System Error:", error);
                 alert("System Malfunction. Please try again later.");
             } finally {
                 btn.disabled = false;
