@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Level Up Cost Estimator | Level Up Home Services</title>
+
+<!-- GOOGLE ANALYTICS (Matches Main Site) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-NTLGDNZY2Y"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-NTLGDNZY2Y');
+</script>
+
+<!-- EXTERNAL LIBRARIES -->
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/lucide@latest" defer></script>
+<!-- Fonts matching index.html + Rajdhani for HUD feel -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=JetBrains+Mono:wght@400;700&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+
+<script>
+    tailwind.config = {
+        theme: {
+            extend: {
+                colors: {
+                    orange: {
+                        400: '#fb923c',
+                        500: '#f97316',
+                        600: '#ea580c',
+                        800: '#9a3412',
+                    }
+                },
+                fontFamily: {
+                    sans: ['Inter', 'sans-serif'],
+                    mono: ['JetBrains Mono', 'monospace'],
+                    hud: ['Rajdhani', 'sans-serif'],
+                }
+            }
+        }
+    }
+</script>
+
+<style>
+  body { font-family: 'Inter', sans-serif; }
+  .font-mono { font-family: 'JetBrains Mono', monospace; }
+  .font-hud { font-family: 'Rajdhani', sans-serif; }
+  
+  /* Custom Scrollbar */
+  ::-webkit-scrollbar { width: 10px; }
+  ::-webkit-scrollbar-track { background: #0f172a; }
+  ::-webkit-scrollbar-thumb { background: #334155; border-radius: 5px; }
+  ::-webkit-scrollbar-thumb:hover { background: #ea580c; }
+
+  /* Animation Utilities */
+  .group:hover .group-hover\:rotate-12 { transform: rotate(12deg); }
+
+  /* Grid Background Effect (Matches Main Site Vibe) */
+  .grid-bg {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background-image: 
+      linear-gradient(#475569 1px, transparent 1px),
+      linear-gradient(90deg, #475569 1px, transparent 1px);
+    background-size: 40px 40px;
+    opacity: 0.1;
+    z-index: -1;
+    pointer-events: none;
+  }
+
+  /* Form Elements Override */
+  select, input[type="number"], textarea {
+    background-color: #0f172a; /* Slate 900 */
+    border-color: #334155; /* Slate 700 */
+    color: white;
+  }
+  select:focus, input:focus, textarea:focus {
+    border-color: #ea580c; /* Orange 600 */
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(234, 88, 12, 0.2);
+  }
+
+  /* Bar Chart Transitions */
+  .bar-segment { transition: width 1s ease-in-out; }
+  
+  /* Loading Spinner */
+  .spinner {
+    width: 40px; height: 40px;
+    border: 4px solid #334155;
+    border-top: 4px solid #ea580c;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 10px auto;
+  }
+  @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+  
+  #results, #contactForm { animation: slideUp 0.5s ease-out; }
+</style>
+</head>
+<body class="bg-slate-900 text-slate-100 selection:bg-orange-500 selection:text-white overflow-x-hidden flex flex-col min-h-screen">
+
+<div class="grid-bg"></div>
+
+<!-- NAVIGATION (Identical to Main Site) -->
+<nav class="fixed top-0 w-full z-50 bg-slate-900/95 backdrop-blur border-b-4 border-slate-800 shadow-lg">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center h-20">
+            <!-- Logo -->
+            <a href="index.html" class="flex items-center space-x-2 group cursor-pointer hover:scale-105 transition-transform duration-200">
+                <div class="bg-orange-600 p-2 rounded-lg border-2 border-orange-400 shadow-[0_0_15px_rgba(234,88,12,0.5)]">
+                    <i data-lucide="arrow-up" class="w-6 h-6 text-white" stroke-width="3"></i>
+                </div>
+                <div class="flex flex-col">
+                    <span class="text-2xl font-black italic tracking-tighter leading-none text-white drop-shadow-md">
+                        LEVEL UP
+                    </span>
+                    <span class="text-xs font-bold text-slate-400 tracking-widest">HOME SERVICES</span>
+                </div>
+            </a>
+
+            <!-- Desktop Nav -->
+            <div class="hidden md:flex items-center space-x-8">
+                <a href="index.html#services" class="text-slate-200 hover:text-orange-500 font-bold transition-colors">QUESTS</a>
+                <a href="index.html#ai-planner" class="text-slate-200 hover:text-orange-500 font-bold transition-colors flex items-center gap-2">
+                    <i data-lucide="sparkles" class="w-4 h-4"></i> LEVEL DESIGNER
+                </a>
+                <!-- Active Page Indicator -->
+                <a href="estimator.html" class="text-orange-400 font-bold transition-colors flex items-center gap-2 border-b-2 border-orange-500 pb-1">
+                    <i data-lucide="calculator" class="w-4 h-4"></i> XP CALCULATOR
+                </a>
+                <a href="index.html#partners" class="text-slate-200 hover:text-orange-500 font-bold transition-colors">CO-OP MODE</a>
+                <a href="index.html#about" class="text-slate-200 hover:text-orange-500 font-bold transition-colors">ABOUT</a>
+                <a href="tel:5209069440" class="bg-orange-600 hover:bg-orange-500 text-white px-6 py-2 rounded font-black transform hover:-translate-y-1 active:translate-y-0 transition-all border-b-4 border-orange-800 hover:border-orange-700 shadow-lg flex items-center gap-2">
+                    <i data-lucide="phone" class="w-4 h-4"></i>
+                    START GAME
+                </a>
+            </div>
+
+            <!-- Mobile Menu Button -->
+            <div class="md:hidden">
+                <button id="mobile-menu-btn" class="text-slate-200 hover:text-white p-2">
+                    <i data-lucide="menu" class="w-8 h-8"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile Nav Menu -->
+    <div id="mobile-menu" class="hidden md:hidden bg-slate-800 border-b-4 border-orange-600">
+        <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+            <a href="index.html#services" class="block px-3 py-4 text-center font-bold text-white hover:bg-slate-700 rounded mobile-link">QUESTS</a>
+            <a href="estimator.html" class="block px-3 py-4 text-center font-bold text-orange-400 bg-slate-900/50 rounded mobile-link">XP CALCULATOR</a>
+            <a href="index.html#ai-planner" class="block px-3 py-4 text-center font-bold text-white hover:bg-slate-700 rounded mobile-link">✨ AI DESIGNER</a>
+            <a href="index.html#partners" class="block px-3 py-4 text-center font-bold text-white hover:bg-slate-700 rounded mobile-link">PARTNERS</a>
+            <a href="index.html#about" class="block px-3 py-4 text-center font-bold text-white hover:bg-slate-700 rounded mobile-link">ABOUT</a>
+            <a href="tel:5209069440" class="block px-3 py-4 text-center font-black text-orange-400 bg-slate-900 rounded border-2 border-orange-600 mx-4 my-2">
+                CALL (520) 906-9440
+            </a>
+        </div>
+    </div>
+</nav>
+
+<!-- MAIN CONTENT -->
+<main class="flex-grow pt-32 pb-20 px-4 sm:px-6 lg:px-8 relative z-10">
+    <!-- Header Section -->
+    <div class="max-w-4xl mx-auto text-center mb-12">
+        <div class="inline-block px-3 py-1 bg-orange-900/40 text-orange-400 border border-orange-500/50 rounded-full text-xs font-mono font-bold mb-4">
+            BETA FEATURE
+        </div>
+        <!-- Optimized Header Text for Responsiveness -->
+        <h1 class="text-3xl sm:text-4xl md:text-6xl font-black text-white mb-4 tracking-tight drop-shadow-2xl italic uppercase font-hud">
+            Project <span class="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-orange-600">XP Calculator</span>
+        </h1>
+        <p class="text-slate-400 text-lg max-w-2xl mx-auto">
+            Calculate your renovation gold requirements and plan your next level up. 
+            <br class="hidden sm:inline">Estimates are rough guides; final boss battles require a site visit.
+        </p>
+    </div>
+
+    <!-- Estimator Card -->
+    <div class="max-w-3xl mx-auto bg-slate-800 rounded-2xl border-4 border-slate-700 shadow-2xl overflow-hidden">
+        <!-- Card Header -->
+        <div class="bg-slate-950 px-6 py-3 border-b border-slate-700 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+                <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+                <div class="w-3 h-3 rounded-full bg-green-500"></div>
+            </div>
+            <div class="text-xs font-mono text-slate-500">ESTIMATOR_TOOL_v1.0</div>
+        </div>
+
+        <div class="p-8 md:p-10">
+            <!-- INPUT SECTION -->
+            <div id="inputSection" class="space-y-6">
+                
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-bold text-orange-400 font-mono mb-2 uppercase">1. Select Mission Type</label>
+                        <select id="projectType" class="w-full p-4 rounded-lg border-2 border-slate-700 focus:border-orange-500 transition-colors cursor-pointer appearance-none">
+                            <option value="drywall">Drywall Repair / Install</option>
+                            <option value="paint">Interior Painting</option>
+                            <option value="flooring">Flooring (Tile/Laminate)</option>
+                            <option value="bath">Bathroom Remodel (Full)</option>
+                            <option value="kitchen">Kitchen Remodel (Full)</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-bold text-orange-400 font-mono mb-2 uppercase">2. Area Size (Sq. Ft)</label>
+                        <input type="number" id="sqft" placeholder="e.g. 150" min="10" class="w-full p-4 rounded-lg border-2 border-slate-700 focus:border-orange-500 transition-colors">
+                        <!-- Cheat Sheet Helper -->
+                        <div id="sizeHelper" class="text-xs text-slate-500 mt-2 font-mono hidden">
+                            <span class="cursor-pointer hover:text-orange-400" onclick="document.getElementById('sqft').value=45">Guest Bath (~45)</span> | 
+                            <span class="cursor-pointer hover:text-orange-400" onclick="document.getElementById('sqft').value=100">Master Bath (~100)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-bold text-orange-400 font-mono mb-2 uppercase">3. Quest Difficulty (Finish)</label>
+                        <select id="finishLevel" class="w-full p-4 rounded-lg border-2 border-slate-700 focus:border-orange-500 transition-colors cursor-pointer appearance-none">
+                            <option value="standard">Standard (Cosmetic/Value)</option>
+                            <option value="premium">Premium (High End Materials)</option>
+                            <option value="luxury">Luxury (Custom/Top Tier)</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-bold text-orange-400 font-mono mb-2 uppercase">4. Map Zone</label>
+                        <select id="locationZone" class="w-full p-4 rounded-lg border-2 border-slate-700 focus:border-orange-500 transition-colors cursor-pointer appearance-none">
+                            <option value="1.0">Tucson (Central)</option>
+                            <option value="1.12">Vail / Rita Ranch</option>
+                            <option value="1.18">Oro Valley</option>
+                            <option value="1.25">Foothills</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button onclick="calculateCost()" class="w-full bg-orange-600 hover:bg-orange-500 text-white font-black py-4 rounded-lg text-lg uppercase tracking-wider transform hover:-translate-y-1 transition-all border-b-4 border-orange-800 shadow-lg flex items-center justify-center gap-2 mt-8 font-hud">
+                    <i data-lucide="calculator" class="w-5 h-5"></i>
+                    CALCULATE XP & GOLD
+                </button>
+            </div>
+
+            <!-- LOADING STATE -->
+            <div id="loader" class="hidden text-center py-12">
+                <div class="spinner"></div>
+                <p class="text-slate-400 font-mono animate-pulse">ANALYZING MARKET DATA...</p>
+            </div>
+
+            <!-- RESULTS SECTION -->
+            <div id="results" class="hidden mt-8 border-t-2 border-dashed border-slate-700 pt-8">
+                <div class="bg-slate-900 rounded-xl p-6 border border-slate-700 text-center mb-8 relative overflow-hidden group">
+                    <div class="absolute inset-0 bg-orange-500/5 group-hover:bg-orange-500/10 transition-colors"></div>
+                    <h3 class="text-slate-400 font-mono text-sm uppercase tracking-widest mb-2">Estimated Investment Range</h3>
+                    <div class="text-4xl md:text-5xl font-black text-white drop-shadow-lg font-hud" id="priceRange">$0 - $0</div>
+                    <p class="text-slate-500 text-xs mt-2">*Estimate only. Does not include unforeseen issues.</p>
+                </div>
+
+                <div class="space-y-4 mb-8">
+                    <div class="flex justify-between items-end mb-2">
+                        <label class="text-xs font-bold text-slate-400 uppercase tracking-widest">Resource Allocation</label>
+                    </div>
+                    
+                    <div class="h-6 bg-slate-950 rounded-full overflow-hidden flex w-full">
+                        <div class="bar-segment bg-blue-500" id="barLabor" style="width: 0%"></div>
+                        <div class="bar-segment bg-green-500" id="barMaterial" style="width: 0%"></div>
+                        <div class="bar-segment bg-purple-500" id="barOther" style="width: 0%"></div>
+                    </div>
+                    
+                    <div class="flex justify-between text-xs font-mono text-slate-400 px-1">
+                        <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-blue-500"></span> Labor/Trades ($<span id="laborVal">0</span>)</span>
+                        <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-green-500"></span> Material ($<span id="materialVal">0</span>)</span>
+                        <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-purple-500"></span> Logistics ($<span id="otherVal">0</span>)</span>
+                    </div>
+                </div>
+
+                <div class="text-center">
+                    <p class="text-slate-300 mb-4">Ready to start this quest?</p>
+                    <button class="w-full bg-green-600 hover:bg-green-500 text-white font-bold py-3 rounded-lg border-b-4 border-green-800 transition-all active:border-b-0 active:translate-y-1 font-hud uppercase tracking-wide" onclick="showContactForm()">
+                        CHECK AVAILABILITY
+                    </button>
+                </div>
+            </div>
+
+            <!-- CONTACT FORM -->
+            <div id="contactForm" class="hidden mt-8 pt-8 border-t-2 border-dashed border-slate-700">
+                <!-- Replace YOUR_FORM_ID_HERE with your actual Formspree ID -->
+                <form action="https://formspree.io/f/YOUR_FORM_ID_HERE" method="POST" class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-bold text-orange-400 font-mono mb-2 uppercase">Player Name</label>
+                        <input type="text" name="name" required placeholder="Enter Name" class="w-full p-3 rounded-lg border-2 border-slate-700 focus:border-orange-500 bg-slate-900 text-white transition-colors">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-bold text-orange-400 font-mono mb-2 uppercase">Contact Email</label>
+                        <input type="email" name="email" required placeholder="name@example.com" class="w-full p-3 rounded-lg border-2 border-slate-700 focus:border-orange-500 bg-slate-900 text-white transition-colors">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-bold text-orange-400 font-mono mb-2 uppercase">Quest Log (Auto-Filled)</label>
+                        <textarea id="autoMessage" name="message" rows="5" class="w-full p-3 rounded-lg border-2 border-slate-700 bg-slate-950 text-slate-300 font-mono text-sm focus:border-orange-500 transition-colors" readonly></textarea>
+                    </div>
+
+                    <!-- Honeypot for Anti-Spam -->
+                    <input type="text" name="_gotcha" style="display:none">
+
+                    <button type="submit" class="w-full bg-orange-600 hover:bg-orange-500 text-white font-black py-4 rounded-lg text-lg uppercase tracking-wider transform hover:-translate-y-1 transition-all border-b-4 border-orange-800 shadow-lg flex items-center justify-center gap-2 font-hud">
+                        <i data-lucide="send" class="w-5 h-5"></i>
+                        SEND REQUEST
+                    </button>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</main>
+
+<!-- FOOTER (Identical to Main Site) -->
+<footer class="bg-slate-950 py-12 border-t border-slate-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid md:grid-cols-4 gap-8 mb-12">
+            <div class="col-span-2 flex flex-col md:flex-row items-center md:items-start gap-6">
+                <!-- Ensure logo.png exists in root -->
+                <img src="logo.png" alt="Level Up Home Services" class="w-32 md:w-40 object-contain shrink-0" width="160" height="80" loading="lazy">
+                <div class="text-center md:text-left">
+                    <div class="flex items-center justify-center md:justify-start space-x-2 mb-2">
+                         <div class="bg-orange-600 p-1 rounded">
+                            <i data-lucide="arrow-up" class="w-4 h-4 text-white"></i>
+                        </div>
+                        <span class="text-xl font-black italic text-white">LEVEL UP</span>
+                    </div>
+                    <p class="text-slate-400 max-w-sm">
+                        Serving Tucson, Marana & Vail. <br/>
+                        Elevating homes one level at a time.
+                    </p>
+                </div>
+            </div>
+            
+            <div>
+                <h4 class="text-white font-bold mb-4 uppercase text-sm tracking-wider">Contact</h4>
+                <ul class="space-y-3 text-slate-400">
+                    <li class="flex items-center gap-2 hover:text-orange-500 transition-colors">
+                        <i data-lucide="phone" class="w-4 h-4"></i>
+                        <a href="tel:5209069440">(520) 906-9440</a>
+                    </li>
+                    <li class="flex items-center gap-2 hover:text-orange-500 transition-colors">
+                        <i data-lucide="mail" class="w-4 h-4"></i>
+                        <a href="mailto:CallLevelUp@gmail.com">CallLevelUp@gmail.com</a>
+                    </li>
+                    <li class="flex items-center gap-2">
+                        <i data-lucide="map-pin" class="w-4 h-4"></i>
+                        Tucson, AZ
+                    </li>
+                </ul>
+            </div>
+
+            <div>
+                <h4 class="text-white font-bold mb-4 uppercase text-sm tracking-wider">Social</h4>
+                <a href="https://instagram.com/levelup_homeservices_llc" target="_blank" rel="noreferrer" class="inline-block bg-slate-900 p-3 rounded-lg border border-slate-800 hover:border-orange-500 hover:text-orange-500 text-slate-400 transition-all" aria-label="Follow Level Up Home Services on Instagram">
+                    @levelup_homeservices_llc
+                </a>
+            </div>
+        </div>
+        
+        <div class="border-t border-slate-900 pt-8 flex flex-col md:flex-row justify-between items-center text-xs text-slate-400 font-mono">
+            <p>© 2026 Level Up Home Services LLC. All Rights Reserved.</p>
+            <p class="mt-2 md:mt-0">GAME OVER / CONTINUE?</p>
+        </div>
+    </div>
+</footer>
+
+<!-- LOGIC -->
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+      // Init Lucide Icons
+      if (typeof lucide !== 'undefined') {
+        lucide.createIcons();
+      }
+
+      // Mobile Menu Logic
+      const menuBtn = document.getElementById('mobile-menu-btn');
+      const mobileMenu = document.getElementById('mobile-menu');
+      if(menuBtn && mobileMenu){
+          menuBtn.addEventListener('click', () => { mobileMenu.classList.toggle('hidden'); });
+      }
+
+      // Helper Text Logic
+      const projectType = document.getElementById('projectType');
+      const sizeHelper = document.getElementById('sizeHelper');
+      
+      projectType.addEventListener('change', (e) => {
+          if (e.target.value === 'bath' || e.target.value === 'kitchen') {
+              sizeHelper.classList.remove('hidden');
+              // Update helper text based on selection
+              if (e.target.value === 'bath') {
+                  sizeHelper.innerHTML = '<span class="cursor-pointer hover:text-orange-400" onclick="document.getElementById(\'sqft\').value=45">Guest Bath (~45)</span> | <span class="cursor-pointer hover:text-orange-400" onclick="document.getElementById(\'sqft\').value=100">Master Bath (~100)</span>';
+              } else {
+                  sizeHelper.innerHTML = '<span class="cursor-pointer hover:text-orange-400" onclick="document.getElementById(\'sqft\').value=150">Small Kitchen (~150)</span> | <span class="cursor-pointer hover:text-orange-400" onclick="document.getElementById(\'sqft\').value=250">Large Kitchen (~250)</span>';
+              }
+          } else {
+              sizeHelper.classList.add('hidden');
+          }
+      });
+  });
+
+  // --- CONFIGURATION ---
+  // Base rates per sqft for "Standard" finish in "Central Tucson"
+  const BASE_RATES = {
+    drywall: { min: 4.50, max: 6.50 },
+    paint: { min: 3.50, max: 5.50 },
+    flooring: { min: 8.00, max: 12.00 },
+    // Specific remodel rates from provided logic
+    bath: { min: 125.00, max: 180.00 }, 
+    kitchen: { min: 115.00, max: 175.00 }
+  };
+
+  // Multipliers for Finish Quality
+  // Standard is base 1.0 (Cosmetic/Value)
+  // Premium is mid-tier materials
+  // Luxury is top tier (up to $550/sqft logic implied)
+  const FINISH_MULTIPLIERS = {
+    standard: 1.0,
+    premium: 1.6, // Bumps bath to ~$200-$280/sqft
+    luxury: 3.0   // Bumps bath to ~$375-$540/sqft (Hitting that $550 max)
+  };
+
+  // Job Minimums (Floors)
+  const JOB_FLOORS = {
+    drywall: 500,
+    paint: 500,
+    flooring: 1000,
+    bath: 5000,
+    kitchen: 12000
+  };
+
+  function calculateCost() {
+    const type = document.getElementById('projectType').value;
+    const sqft = parseFloat(document.getElementById('sqft').value);
+    const finish = document.getElementById('finishLevel').value;
+    const zoneMultiplier = parseFloat(document.getElementById('locationZone').value);
+
+    if (!sqft || sqft < 10) {
+      alert("Please enter a valid square footage (min 10).");
+      return;
+    }
+
+    // UI State
+    const inputSection = document.getElementById('inputSection');
+    const loader = document.getElementById('loader');
+    const results = document.getElementById('results');
+    const contactForm = document.getElementById('contactForm');
+
+    inputSection.classList.add('opacity-50', 'pointer-events-none');
+    loader.classList.remove('hidden');
+    results.classList.add('hidden');
+    contactForm.classList.add('hidden');
+
+    // Psychological Delay (1.2s)
+    setTimeout(() => {
+      // Logic Engine
+      const rates = BASE_RATES[type];
+      const finishMult = FINISH_MULTIPLIERS[finish];
+      
+      // Calculate raw range
+      let rawMin = (rates.min * sqft) * finishMult * zoneMultiplier;
+      let rawMax = (rates.max * sqft) * finishMult * zoneMultiplier;
+
+      // Apply Floor (Minimum Job Size)
+      const floor = JOB_FLOORS[type] || 0;
+      if (rawMin < floor) rawMin = floor;
+      if (rawMax < floor * 1.2) rawMax = floor * 1.2; // Ensure some range exists
+
+      // Rounding to nice numbers
+      let low = Math.round(rawMin / 100) * 100;
+      let high = Math.round(rawMax / 100) * 100;
+      
+      // Formatting
+      const fmt = (n) => n.toLocaleString();
+      
+      // Breakdowns (50/40/10 Rule)
+      let totalAvg = Math.round((low + high) / 2);
+      
+      document.getElementById('priceRange').innerText = `$${fmt(low)} - $${fmt(high)}`;
+      
+      document.getElementById('laborVal').innerText = fmt(Math.round(totalAvg * 0.50));
+      document.getElementById('materialVal').innerText = fmt(Math.round(totalAvg * 0.40));
+      document.getElementById('otherVal').innerText = fmt(Math.round(totalAvg * 0.10));
+
+      document.getElementById('barLabor').style.width = '50%';
+      document.getElementById('barMaterial').style.width = '40%';
+      document.getElementById('barOther').style.width = '10%';
+
+      // Pre-fill Message for Contact Form
+      const locText = document.getElementById('locationZone').options[document.getElementById('locationZone').selectedIndex].text;
+      const typeText = document.getElementById('projectType').options[document.getElementById('projectType').selectedIndex].text;
+      const finishText = document.getElementById('finishLevel').options[document.getElementById('finishLevel').selectedIndex].text;
+      
+      const msg = `Mission Request from LevelUp Estimator:\n\nTarget: ${typeText}\nDifficulty: ${finishText}\nZone: ${locText}\nSize: ${sqft} sq.ft.\nEst. Loot Requirement: $${fmt(low)} - $${fmt(high)}`;
+      document.getElementById('autoMessage').value = msg;
+
+      // Show Results
+      loader.classList.add('hidden');
+      inputSection.classList.remove('opacity-50', 'pointer-events-none');
+      results.classList.remove('hidden');
+      
+      // Smooth scroll to results
+      results.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+    }, 1200); 
+  }
+
+  function showContactForm() {
+    const form = document.getElementById('contactForm');
+    form.classList.remove('hidden');
+    form.scrollIntoView({ behavior: 'smooth' });
+  }
+</script>
+
+</body>
+</html>

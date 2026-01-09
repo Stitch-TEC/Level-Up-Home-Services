@@ -99,8 +99,12 @@
                 <!-- Desktop Nav -->
                 <div class="hidden md:flex items-center space-x-8">
                     <a href="#services" class="text-slate-200 hover:text-orange-500 font-bold transition-colors">QUESTS</a>
-                    <a href="#ai-planner" class="text-orange-400 hover:text-orange-300 font-bold transition-colors flex items-center gap-2">
+                    <a href="#ai-planner" class="text-slate-200 hover:text-orange-500 font-bold transition-colors flex items-center gap-2">
                         <i data-lucide="sparkles" class="w-4 h-4"></i> LEVEL DESIGNER
+                    </a>
+                    <!-- NEW ESTIMATOR LINK -->
+                    <a href="estimator.html" class="text-orange-400 hover:text-orange-300 font-bold transition-colors flex items-center gap-2">
+                        <i data-lucide="calculator" class="w-4 h-4"></i> XP CALCULATOR
                     </a>
                     <a href="#partners" class="text-slate-200 hover:text-orange-500 font-bold transition-colors">CO-OP MODE</a>
                     <a href="#about" class="text-slate-200 hover:text-orange-500 font-bold transition-colors">ABOUT</a>
@@ -123,7 +127,8 @@
         <div id="mobile-menu" class="hidden md:hidden bg-slate-800 border-b-4 border-orange-600">
             <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
                 <a href="#services" class="block px-3 py-4 text-center font-bold text-white hover:bg-slate-700 rounded mobile-link">QUESTS</a>
-                <a href="#ai-planner" class="block px-3 py-4 text-center font-bold text-orange-400 hover:bg-slate-700 rounded mobile-link">✨ AI DESIGNER</a>
+                <a href="estimator.html" class="block px-3 py-4 text-center font-bold text-orange-400 hover:bg-slate-700 rounded mobile-link">XP CALCULATOR</a>
+                <a href="#ai-planner" class="block px-3 py-4 text-center font-bold text-white hover:bg-slate-700 rounded mobile-link">✨ AI DESIGNER</a>
                 <a href="#partners" class="block px-3 py-4 text-center font-bold text-white hover:bg-slate-700 rounded mobile-link">PARTNERS</a>
                 <a href="#about" class="block px-3 py-4 text-center font-bold text-white hover:bg-slate-700 rounded mobile-link">ABOUT</a>
                 <a href="tel:5209069440" class="block px-3 py-4 text-center font-black text-orange-400 bg-slate-900 rounded border-2 border-orange-600 mx-4 my-2">
@@ -614,7 +619,7 @@
 
         async function callGeminiWithBackoff(systemPrompt, userQuery, retries = 5) {
             // FIXED: Using standard stable model URL
-            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
             const payload = {
                 contents: [{ parts: [{ text: userQuery }] }],
                 systemInstruction: { parts: [{ text: systemPrompt }] },
