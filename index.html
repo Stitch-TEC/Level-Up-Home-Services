@@ -527,7 +527,6 @@
             }
         });
 
-        // --- AI LOGIC ---
         const apiKey = "AIzaSyADSeEJM13BvC3XIsXw3GOSEUxpXrtNCFQ"; 
 
         async function generateLevelPlan() {
@@ -591,7 +590,8 @@
 
             } catch (error) {
                 console.error("System Error:", error);
-                alert("System Malfunction. Please try again later.");
+                // The error object itself will now be alerted so you see "403" or "404" specifically
+                alert(`System Malfunction: ${error.message}`);
             } finally {
                 btn.disabled = false;
                 btnText.innerText = "INITIALIZE DESIGN PROTOCOL";
@@ -599,6 +599,10 @@
         }
 
         async function callGeminiWithBackoff(systemPrompt, userQuery, retries = 5) {
+<<<<<<< HEAD
+=======
+            // FIXED: Using standard stable model URL
+>>>>>>> 2f61433 (stable attempt)
             const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
             const payload = {
                 contents: [{ parts: [{ text: userQuery }] }],
@@ -614,7 +618,14 @@
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(payload)
                     });
-                    if (!response.ok) throw new Error(`HTTP Error: ${response.status}`);
+                    
+                    if (!response.ok) {
+                        // Capture the actual error text from Google
+                        const errorData = await response.json().catch(() => ({}));
+                        const errorMessage = errorData.error?.message || response.statusText;
+                        throw new Error(`HTTP Error ${response.status}: ${errorMessage}`);
+                    }
+                    
                     const data = await response.json();
                     return data.candidates?.[0]?.content?.parts?.[0]?.text || "[]";
                 } catch (error) {
