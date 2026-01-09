@@ -527,6 +527,7 @@
             }
         });
 
+        // --- AI LOGIC ---
         const apiKey = "AIzaSyADSeEJM13BvC3XIsXw3GOSEUxpXrtNCFQ"; 
 
         async function generateLevelPlan() {
@@ -599,10 +600,7 @@
         }
 
         async function callGeminiWithBackoff(systemPrompt, userQuery, retries = 5) {
-<<<<<<< HEAD
-=======
             // FIXED: Using standard stable model URL
->>>>>>> 2f61433 (stable attempt)
             const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
             const payload = {
                 contents: [{ parts: [{ text: userQuery }] }],
