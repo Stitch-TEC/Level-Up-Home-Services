@@ -528,7 +528,9 @@
         });
 
         // --- AI LOGIC ---
-        const apiKey = "AIzaSyADSeEJM13BvC3XIsXw3GOSEUxpXrtNCFQ"; 
+        // AUTOMATED DEPLOYMENT: Replaces placeholder with Real Key from GitHub Secrets
+        // This stops Google from finding the key in your public repo!
+        const apiKey = "{{GEMINI_API_KEY}}"; 
 
         async function generateLevelPlan() {
             const input = document.getElementById('roomInput').value;
