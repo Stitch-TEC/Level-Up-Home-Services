@@ -70,7 +70,7 @@
   }
 
   /* Form Elements Override */
-  select, input[type="number"], textarea {
+  select, input[type="number"], input[type="text"], input[type="tel"], textarea {
     background-color: #0f172a; /* Slate 900 */
     border-color: #334155; /* Slate 700 */
     color: white;
@@ -97,7 +97,7 @@
   @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
   @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
   
-  #results, #contactForm { animation: slideUp 0.5s ease-out; }
+  #results, #contactArea { animation: slideUp 0.5s ease-out; }
 </style>
 </head>
 <body class="bg-slate-900 text-slate-100 selection:bg-orange-500 selection:text-white overflow-x-hidden flex flex-col min-h-screen">
@@ -232,7 +232,7 @@
                     <div>
                         <label class="block text-sm font-bold text-orange-400 font-mono mb-2 uppercase">4. Map Zone</label>
                         <select id="locationZone" class="w-full p-4 rounded-lg border-2 border-slate-700 focus:border-orange-500 transition-colors cursor-pointer appearance-none">
-                            <option value="1.0">Tucson (Central)</option>
+                            <option value="1.0">Tucson</option>
                             <option value="1.12">Vail / Rita Ranch</option>
                             <option value="1.18">Oro Valley</option>
                             <option value="1.25">Foothills</option>
@@ -256,7 +256,7 @@
             <div id="results" class="hidden mt-8 border-t-2 border-dashed border-slate-700 pt-8">
                 <div class="bg-slate-900 rounded-xl p-6 border border-slate-700 text-center mb-8 relative overflow-hidden group">
                     <div class="absolute inset-0 bg-orange-500/5 group-hover:bg-orange-500/10 transition-colors"></div>
-                    <h3 class="text-slate-400 font-mono text-sm uppercase tracking-widest mb-2">Estimated Investment Range</h3>
+                    <h3 class="text-slate-400 font-mono text-sm uppercase tracking-widest mb-2">Estimated Loot Requirement</h3>
                     <div class="text-4xl md:text-5xl font-black text-white drop-shadow-lg font-hud" id="priceRange">$0 - $0</div>
                     <p class="text-slate-500 text-xs mt-2">*Estimate only. Does not include unforeseen issues.</p>
                 </div>
@@ -281,39 +281,44 @@
 
                 <div class="text-center">
                     <p class="text-slate-300 mb-4">Ready to start this quest?</p>
-                    <button class="w-full bg-green-600 hover:bg-green-500 text-white font-bold py-3 rounded-lg border-b-4 border-green-800 transition-all active:border-b-0 active:translate-y-1 font-hud uppercase tracking-wide" onclick="showContactForm()">
-                        CHECK AVAILABILITY
+                    <button class="w-full bg-green-600 hover:bg-green-500 text-white font-bold py-3 rounded-lg border-b-4 border-green-800 transition-all active:border-b-0 active:translate-y-1 font-hud uppercase tracking-wide" onclick="showContactArea()">
+                        BOOK SITE VISIT
                     </button>
                 </div>
             </div>
 
-            <!-- CONTACT FORM -->
-            <div id="contactForm" class="hidden mt-8 pt-8 border-t-2 border-dashed border-slate-700">
-                <!-- Replace YOUR_FORM_ID_HERE with your actual Formspree ID -->
-                <form action="https://formspree.io/f/YOUR_FORM_ID_HERE" method="POST" class="space-y-4">
+            <!-- CONTACT AREA (Simplified for Mailto) -->
+            <div id="contactArea" class="hidden mt-8 pt-8 border-t-2 border-dashed border-slate-700">
+                <div class="space-y-4">
+                    <!-- Added Phone Number -->
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-bold text-orange-400 font-mono mb-2 uppercase">Player Name</label>
+                            <input type="text" id="playerName" required placeholder="Enter Name" class="w-full p-3 rounded-lg border-2 border-slate-700 focus:border-orange-500 bg-slate-900 text-white transition-colors">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-bold text-orange-400 font-mono mb-2 uppercase">Contact Phone</label>
+                            <input type="tel" id="playerPhone" required placeholder="(520) 555-0123" class="w-full p-3 rounded-lg border-2 border-slate-700 focus:border-orange-500 bg-slate-900 text-white transition-colors">
+                        </div>
+                    </div>
+
+                    <!-- Added Optional Address -->
                     <div>
-                        <label class="block text-sm font-bold text-orange-400 font-mono mb-2 uppercase">Player Name</label>
-                        <input type="text" name="name" required placeholder="Enter Name" class="w-full p-3 rounded-lg border-2 border-slate-700 focus:border-orange-500 bg-slate-900 text-white transition-colors">
+                        <label class="block text-sm font-bold text-orange-400 font-mono mb-2 uppercase">Project Address <span class="text-slate-500 text-xs lowercase font-normal">(optional)</span></label>
+                        <input type="text" id="playerAddress" placeholder="Street Address, City" class="w-full p-3 rounded-lg border-2 border-slate-700 focus:border-orange-500 bg-slate-900 text-white transition-colors">
                     </div>
                     
                     <div>
-                        <label class="block text-sm font-bold text-orange-400 font-mono mb-2 uppercase">Contact Email</label>
-                        <input type="email" name="email" required placeholder="name@example.com" class="w-full p-3 rounded-lg border-2 border-slate-700 focus:border-orange-500 bg-slate-900 text-white transition-colors">
+                        <label class="block text-sm font-bold text-orange-400 font-mono mb-2 uppercase">Quest Log (Review Only)</label>
+                        <textarea id="autoMessage" rows="5" class="w-full p-3 rounded-lg border-2 border-slate-700 bg-slate-950 text-slate-300 font-mono text-sm focus:border-orange-500 transition-colors" readonly></textarea>
                     </div>
 
-                    <div>
-                        <label class="block text-sm font-bold text-orange-400 font-mono mb-2 uppercase">Quest Log (Auto-Filled)</label>
-                        <textarea id="autoMessage" name="message" rows="5" class="w-full p-3 rounded-lg border-2 border-slate-700 bg-slate-950 text-slate-300 font-mono text-sm focus:border-orange-500 transition-colors" readonly></textarea>
-                    </div>
-
-                    <!-- Honeypot for Anti-Spam -->
-                    <input type="text" name="_gotcha" style="display:none">
-
-                    <button type="submit" class="w-full bg-orange-600 hover:bg-orange-500 text-white font-black py-4 rounded-lg text-lg uppercase tracking-wider transform hover:-translate-y-1 transition-all border-b-4 border-orange-800 shadow-lg flex items-center justify-center gap-2 font-hud">
-                        <i data-lucide="send" class="w-5 h-5"></i>
-                        SEND REQUEST
+                    <button onclick="sendMailDraft()" class="w-full bg-orange-600 hover:bg-orange-500 text-white font-black py-4 rounded-lg text-lg uppercase tracking-wider transform hover:-translate-y-1 transition-all border-b-4 border-orange-800 shadow-lg flex items-center justify-center gap-2 font-hud">
+                        <i data-lucide="mail" class="w-5 h-5"></i>
+                        OPEN EMAIL DRAFT
                     </button>
-                </form>
+                    <p class="text-xs text-center text-slate-500 mt-2">Opens your default email app with details pre-filled.</p>
+                </div>
             </div>
 
         </div>
@@ -453,12 +458,12 @@
     const inputSection = document.getElementById('inputSection');
     const loader = document.getElementById('loader');
     const results = document.getElementById('results');
-    const contactForm = document.getElementById('contactForm');
+    const contactArea = document.getElementById('contactArea');
 
     inputSection.classList.add('opacity-50', 'pointer-events-none');
     loader.classList.remove('hidden');
     results.classList.add('hidden');
-    contactForm.classList.add('hidden');
+    contactArea.classList.add('hidden');
 
     // Psychological Delay (1.2s)
     setTimeout(() => {
@@ -514,10 +519,23 @@
     }, 1200); 
   }
 
-  function showContactForm() {
-    const form = document.getElementById('contactForm');
-    form.classList.remove('hidden');
-    form.scrollIntoView({ behavior: 'smooth' });
+  function showContactArea() {
+    const area = document.getElementById('contactArea');
+    area.classList.remove('hidden');
+    area.scrollIntoView({ behavior: 'smooth' });
+  }
+
+  function sendMailDraft() {
+    const playerName = document.getElementById('playerName').value || "Player";
+    const playerPhone = document.getElementById('playerPhone').value || "Not provided";
+    const playerAddress = document.getElementById('playerAddress').value || "Not provided";
+    const details = document.getElementById('autoMessage').value;
+    const projectType = document.getElementById('projectType').options[document.getElementById('projectType').selectedIndex].text;
+    
+    const subject = encodeURIComponent(`New Mission Request: ${projectType} from ${playerName}`);
+    const body = encodeURIComponent(`Player Name: ${playerName}\nPhone: ${playerPhone}\nAddress: ${playerAddress}\n\n${details}\n\n[End of Quest Log]`);
+    
+    window.location.href = `mailto:CallLevelUp@gmail.com?subject=${subject}&body=${body}`;
   }
 </script>
 
